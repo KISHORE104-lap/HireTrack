@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log in · HireTrack</title>
+  <meta name="description" content="Log in to HireTrack, your job application tracker.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234B3FD6'/%3E%3Cpath d='M9 22V10m0 6h14M23 22V10' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body class="auth-page">
+  <!-- Left: what the app is -->
+  <section class="auth-showcase" aria-label="About HireTrack">
+    <div class="brand light">
+      <span class="logo" aria-hidden="true">H</span>
+      <span>HireTrack</span>
+    </div>
+    <div class="showcase-copy">
+      <h1>Every application, one pipeline.</h1>
+      <p>Track where each job application stands, never miss an interview date, and see your progress at a glance.</p>
+    </div>
+    <!-- A small picture of the pipeline (decorative) -->
+    <div class="showcase-pipeline" aria-hidden="true">
+      <div class="mini-stage" data-stage="Wishlist"><b>4</b><span>Wishlist</span></div>
+      <div class="mini-stage" data-stage="Applied"><b>12</b><span>Applied</span></div>
+      <div class="mini-stage" data-stage="Interview"><b>5</b><span>Interview</span></div>
+      <div class="mini-stage" data-stage="Offer"><b>2</b><span>Offer</span></div>
+    </div>
+    <p class="showcase-foot">Built by Kishore S · HTML, CSS, JavaScript, Node.js, Python, Redis, Vercel</p>
+  </section>
+
+  <!-- Right: the login / signup card -->
+  <main class="auth-panel">
+    <div class="auth-card">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="tabLogin" aria-selected="true" aria-controls="loginForm">Log in</button>
+        <button type="button" role="tab" id="tabSignup" aria-selected="false" aria-controls="signupForm">Sign up</button>
+      </div>
+
+      <h2 id="authTitle">Welcome back</h2>
+      <p class="auth-sub" id="authSub">Log in to see your applications.</p>
+
+      <p class="form-errors" id="authError" role="alert" hidden></p>
+
+      <!-- One click, no sign-up: logs in to a demo account that already has sample data -->
+      <button type="button" class="demo-btn" id="demoBtn">
+        <span class="demo-title">Try it instantly</span>
+        <span class="demo-sub">Open a demo account with sample applications. No sign-up needed.</span>
+      </button>
+
+      <!-- Social login buttons: only the ones set up in Vercel are shown -->
+      <div class="social" id="socialButtons" hidden>
+        <a class="social-btn" data-provider="google" href="/auth/start/google"><span class="social-icon" aria-hidden="true">G</span>Continue with Google</a>
+        <a class="social-btn" data-provider="github" href="/auth/start/github"><span class="social-icon" aria-hidden="true">Gh</span>Continue with GitHub</a>
+        <a class="social-btn" data-provider="linkedin" href="/auth/start/linkedin"><span class="social-icon" aria-hidden="true">in</span>Continue with LinkedIn</a>
+      </div>
+
+      <div class="divider"><span id="dividerText">or use your email</span></div>
+
+      <!-- Log in form -->
+      <form id="loginForm" novalidate>
+        <label>Email
+          <input name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+        </label>
+        <label>Password
+          <input name="password" type="password" autocomplete="current-password" required placeholder="Your password">
+        </label>
+        <button type="submit" class="primary wide">Log in</button>
+      </form>
+
+      <!-- Sign up form -->
+      <form id="signupForm" novalidate hidden>
+        <label>Full name
+          <input name="name" autocomplete="name" required maxlength="60" placeholder="e.g. Kishore S">
+        </label>
+        <label>Email
+          <input name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+        </label>
+        <label>Password
+          <input name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters">
+        </label>
+        <button type="submit" class="primary wide">Create account</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="login.js"></script>
+</body>
+</html>
