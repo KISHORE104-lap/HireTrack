@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HireTrack — Job Application Tracker</title>
+  <meta name="description" content="Track every job application from wishlist to offer.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234B3FD6'/%3E%3Cpath d='M9 22V10m0 6h14M23 22V10' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body>
+  <!-- ============ HEADER ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">H</span>
+      <span>HireTrack</span>
+    </div>
+    <div class="topbar-right">
+      <p class="storage" id="storageStatus">Connecting…</p>
+      <!-- Logged-in user, filled in by app.js -->
+      <div class="user" id="userBox" hidden>
+        <span class="avatar" id="userAvatar" aria-hidden="true"></span>
+        <span class="user-name" id="userName"></span>
+        <button type="button" class="small secondary" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ PIPELINE (dashboard) ============ -->
+    <section class="pipeline-section" aria-labelledby="pipelineTitle">
+      <div class="intro">
+        <p class="greeting" id="greeting">Welcome</p>
+        <h1 id="pipelineTitle">Your job hunt, one pipeline.</h1>
+        <p>Every application you send, where it stands, and what comes next.</p>
+      </div>
+
+      <!-- One tile per stage; filled in by app.js -->
+      <div class="pipeline" id="pipeline" role="group" aria-label="Filter by stage"></div>
+
+      <div class="insights">
+        <div class="insight">
+          <p class="insight-value" id="totalCount">0</p>
+          <p class="insight-label">Applications</p>
+        </div>
+        <div class="insight">
+          <p class="insight-value" id="responseRate">0%</p>
+          <p class="insight-label">Reached interview or offer</p>
+        </div>
+        <div class="insight upcoming">
+          <p class="insight-label">Upcoming interviews</p>
+          <ul id="upcomingList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CHARTS (drawn by the Python function api/chart.py) ============ -->
+    <section class="charts-section" aria-labelledby="chartsTitle">
+      <div class="section-head">
+        <h2 id="chartsTitle">Insights</h2>
+        <p>Charts drawn on the server by Python (pygal)</p>
+      </div>
+      <div class="charts">
+        <figure class="chart-card">
+          <figcaption>Applications by stage</figcaption>
+          <div class="chart" id="stageChart"><p class="chart-note">Loading chart…</p></div>
+        </figure>
+        <figure class="chart-card">
+          <figcaption>Applications sent per week</figcaption>
+          <div class="chart" id="weeklyChart"><p class="chart-note">Loading chart…</p></div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ APPLICATION LIST ============ -->
+    <section class="list-section" aria-labelledby="listTitle">
+      <div class="toolbar">
+        <h2 id="listTitle">Applications</h2>
+        <div class="toolbar-controls">
+          <label class="search">
+            <span class="visually-hidden">Search</span>
+            <input type="search" id="searchInput" placeholder="Search company or role">
+          </label>
+          <label>
+            <span class="visually-hidden">Sort by</span>
+            <select id="sortSelect">
+              <option value="newest">Newest first</option>
+              <option value="applied">Applied date</option>
+              <option value="company">Company A–Z</option>
+            </select>
+          </label>
+          <button type="button" class="secondary" id="exportBtn">Export CSV</button>
+          <button type="button" class="primary" id="addBtn">Add application</button>
+        </div>
+      </div>
+
+      <p class="filter-note" id="filterNote" hidden></p>
+      <div id="list" class="list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Built by Jeeva Priyan K · HTML, CSS, JavaScript · Node.js API · Python charts · Redis · Vercel</p>
+  </footer>
+
+  <!-- ============ ADD / EDIT FORM (popup) ============ -->
+  <dialog id="formDialog" aria-labelledby="formTitle">
+    <form id="appForm" novalidate>
+      <h2 id="formTitle">Add application</h2>
+
+      <div class="grid">
+        <label>Company *
+          <input name="company" required maxlength="80" placeholder="e.g. Zoho">
+        </label>
+        <label>Job role *
+          <input name="role" required maxlength="80" placeholder="e.g. Software Engineer">
+        </label>
+        <label>Location
+          <input name="location" maxlength="60" placeholder="e.g. Chennai / Remote">
+        </label>
+        <label>Status
+          <select name="status">
+            <option>Wishlist</option>
+            <option selected>Applied</option>
+            <option>Interview</option>
+            <option>Offer</option>
+            <option>Rejected</option>
+          </select>
+        </label>
+        <label>Applied on
+          <input name="appliedOn" type="date">
+        </label>
+        <label>Interview on
+          <input name="interviewOn" type="date">
+        </label>
+      </div>
+      <label>Job link
+        <input name="link" type="url" maxlength="300" placeholder="https://…">
+      </label>
+      <label>Notes
+        <textarea name="notes" rows="3" maxlength="1000" placeholder="Contact person, rounds, what to prepare"></textarea>
+      </label>
+
+      <p class="form-errors" id="formErrors" role="alert" hidden></p>
+
+      <div class="actions">
+        <button type="button" class="secondary" id="cancelBtn">Cancel</button>
+        <button type="submit" class="primary" id="saveBtn">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
